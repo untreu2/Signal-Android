@@ -103,9 +103,15 @@ data class NotificationConversation(
     return if (isOnlyContactJoinedEvent) {
       NotificationChannels.getInstance().JOIN_EVENTS
     } else {
-      recipient.notificationChannel ?: NotificationChannels.getInstance().messagesChannel
+      recipient.notificationChannel
+        ?: if (mostRecentNotification is ReactionNotification) {
+          NotificationChannels.getInstance().reactionsChannel
+        } else {
+          NotificationChannels.getInstance().messagesChannel
+        }
     }
   }
+
 
   fun hasSameContent(other: NotificationConversation?): Boolean {
     if (other == null) {

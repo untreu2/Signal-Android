@@ -158,6 +158,8 @@ public class TextSecurePreferences {
   private static final String NOTIFICATION_CHANNEL_VERSION          = "pref_notification_channel_version";
   private static final String NOTIFICATION_MESSAGES_CHANNEL_VERSION = "pref_notification_messages_channel_version";
 
+  private static final String NOTIFICATION_REACTIONS_CHANNEL_VERSION = "pref_notification_reactions_channel_version";
+
   private static final String NEEDS_MESSAGE_PULL = "pref_needs_message_pull";
 
   private static final String UNIDENTIFIED_ACCESS_CERTIFICATE_ROTATION_TIME_PREF = "pref_unidentified_access_certificate_rotation_time";
@@ -981,6 +983,14 @@ public class TextSecurePreferences {
 
   public static void setNotificationMessagesChannelVersion(Context context, int version) {
     setIntegerPrefrence(context, NOTIFICATION_MESSAGES_CHANNEL_VERSION, version);
+  }
+
+  public static int getNotificationReactionsChannelVersion(Context context) {
+    return getIntegerPreference(context, NOTIFICATION_REACTIONS_CHANNEL_VERSION, 1);
+  }
+
+  public static void setNotificationReactionsChannelVersion(Context context, int version) {
+    setIntegerPrefrence(context, NOTIFICATION_REACTIONS_CHANNEL_VERSION, version);
   }
 
   public static boolean getNeedsMessagePull(Context context) {

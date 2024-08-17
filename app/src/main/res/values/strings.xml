@@ -2819,6 +2819,7 @@
 
     <!-- Notification Channels -->
     <string name="NotificationChannel_channel_messages">Messages</string>
+    <string name="NotificationChannel_channel_reactions">Reactions</string>
     <string name="NotificationChannel_calls">Calls</string>
     <string name="NotificationChannel_failures">Failures</string>
     <string name="NotificationChannel_backups">Backups</string>

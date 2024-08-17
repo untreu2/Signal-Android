@@ -67,6 +67,7 @@ public class NotificationChannels {
   private static final String CATEGORY_MESSAGES = "messages";
   private static final String CONTACT_PREFIX    = "contact_";
   private static final String MESSAGES_PREFIX   = "messages_";
+  private static final String REACTIONS_PREFIX  = "reactions_";
 
   public final String CALLS                            = "calls_v3";
   public final String FAILURES                         = "failures";
@@ -214,6 +215,10 @@ public class NotificationChannels {
    */
   public synchronized @NonNull String getMessagesChannel() {
     return getMessagesChannelId(TextSecurePreferences.getNotificationMessagesChannelVersion(context));
+  }
+
+  public synchronized @NonNull String getReactionsChannel() {
+    return getReactionsChannelId(TextSecurePreferences.getNotificationReactionsChannelVersion(context));
   }
 
   /**
@@ -623,6 +628,7 @@ public class NotificationChannels {
     notificationManager.createNotificationChannelGroup(messagesGroup);
 
     NotificationChannel messages                       = new NotificationChannel(getMessagesChannel(), context.getString(R.string.NotificationChannel_channel_messages), NotificationManager.IMPORTANCE_HIGH);
+    NotificationChannel reactions                      = new NotificationChannel(getReactionsChannel(), context.getString(R.string.NotificationChannel_channel_reactions), NotificationManager.IMPORTANCE_HIGH);
     NotificationChannel calls                          = new NotificationChannel(CALLS, context.getString(R.string.NotificationChannel_calls), NotificationManager.IMPORTANCE_HIGH);
     NotificationChannel failures                       = new NotificationChannel(FAILURES, context.getString(R.string.NotificationChannel_failures), NotificationManager.IMPORTANCE_HIGH);
     NotificationChannel backups                        = new NotificationChannel(BACKUPS, context.getString(R.string.NotificationChannel_backups), NotificationManager.IMPORTANCE_LOW);
@@ -636,6 +642,8 @@ public class NotificationChannels {
     NotificationChannel additionalMessageNotifications = new NotificationChannel(ADDITIONAL_MESSAGE_NOTIFICATIONS, context.getString(R.string.NotificationChannel_additional_message_notifications), NotificationManager.IMPORTANCE_HIGH);
 
     messages.setGroup(CATEGORY_MESSAGES);
+    reactions.setGroup(CATEGORY_MESSAGES);
+
     setVibrationEnabled(messages, SignalStore.settings().isMessageVibrateEnabled());
     messages.setSound(SignalStore.settings().getMessageNotificationSound(), getRingtoneAudioAttributes());
     setLedPreference(messages, SignalStore.settings().getMessageLedColor());
@@ -651,7 +659,7 @@ public class NotificationChannels {
     callStatus.setShowBadge(false);
     appAlerts.setShowBadge(false);
 
-    notificationManager.createNotificationChannels(Arrays.asList(messages, calls, failures, backups, lockedStatus, other, voiceNotes, joinEvents, background, callStatus, appAlerts, additionalMessageNotifications));
+    notificationManager.createNotificationChannels(Arrays.asList(messages, reactions, calls, failures, backups, lockedStatus, other, voiceNotes, joinEvents, background, callStatus, appAlerts, additionalMessageNotifications));
 
     if (BuildConfig.MANAGES_APP_UPDATES) {
       NotificationChannel appUpdates = new NotificationChannel(APP_UPDATES, context.getString(R.string.NotificationChannel_app_updates), NotificationManager.IMPORTANCE_DEFAULT);
@@ -763,6 +771,10 @@ public class NotificationChannels {
 
   private static String getMessagesChannelId(int version) {
     return MESSAGES_PREFIX + version;
+  }
+
+  private static String getReactionsChannelId(int version) {
+    return REACTIONS_PREFIX + version;
   }
 
   @WorkerThread
