@@ -44,6 +44,7 @@ import org.thoughtcrime.securesms.util.navigation.safeNavigate
 
 private const val MESSAGE_SOUND_SELECT: Int = 1
 private const val CALL_RINGTONE_SELECT: Int = 2
+private const val REACTION_SOUND_SELECT: Int = 3
 private val TAG = Log.tag(NotificationsSettingsFragment::class.java)
 
 class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__notifications) {
@@ -77,6 +78,8 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
     } else if (requestCode == CALL_RINGTONE_SELECT && resultCode == Activity.RESULT_OK && data != null) {
       val uri: Uri? = data.getParcelableExtraCompat(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java)
       viewModel.setCallRingtone(uri)
+    } else if (requestCode == REACTION_SOUND_SELECT && resultCode == Activity.RESULT_OK && data != null) {
+      val uri: Uri? = data.getParcelableExtraCompat(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java)
     }
   }
 
@@ -242,6 +245,38 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
 
       dividerPref()
 
+      sectionHeaderPref(R.string.NotificationsSettingsFragment__reactions)
+
+      if (Build.VERSION.SDK_INT >= 30) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__customize),
+          summary = DSLSettingsText.from(R.string.preferences__change_sound_and_vibration),
+          isEnabled = state.reactionNotificationsState.notificationsEnabled,
+          onClick = {
+            NotificationChannels.getInstance().openChannelSettings(requireActivity(), NotificationChannels.getInstance().reactionsChannel, null)
+          }
+        )
+      } else {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__sound),
+          summary = DSLSettingsText.from(getRingtoneSummary(state.reactionNotificationsState.sound)),
+          isEnabled = state.reactionNotificationsState.notificationsEnabled,
+          onClick = {
+            launchReactionSoundSelectionIntent()
+          }
+        )
+
+        switchPref(
+          title = DSLSettingsText.from(R.string.preferences__vibrate),
+          isChecked = state.reactionNotificationsState.vibrateEnabled,
+          isEnabled = state.reactionNotificationsState.notificationsEnabled,
+          onClick = {
+          }
+        )
+      }
+
+      dividerPref()
+
       sectionHeaderPref(R.string.NotificationsSettingsFragment__calls)
 
       switchPref(
@@ -294,6 +329,8 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
           viewModel.setNotifyWhenContactJoinsSignal(!state.notifyWhenContactJoinsSignal)
         }
       )
+
+
     }
   }
 
@@ -329,6 +366,22 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, current)
 
     openRingtonePicker(intent, MESSAGE_SOUND_SELECT)
+  }
+
+  private fun launchReactionSoundSelectionIntent() {
+    val current = SignalStore.settings.reactionNotificationSound
+
+    val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+    intent.putExtra(
+      RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+      Settings.System.DEFAULT_NOTIFICATION_URI
+    )
+    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, current)
+
+    openRingtonePicker(intent, REACTION_SOUND_SELECT)
   }
 
   @RequiresApi(26)

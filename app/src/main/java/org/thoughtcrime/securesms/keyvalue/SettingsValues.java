@@ -76,6 +76,10 @@ public final class SettingsValues extends SignalStoreValues {
   public static final int BACKUP_DEFAULT_HOUR   = 2;
   public static final int BACKUP_DEFAULT_MINUTE = 0;
 
+  public static final String REACTION_NOTIFICATIONS_ENABLED    = "settings.reaction.notifications.enabled";
+  public static final String REACTION_NOTIFICATION_SOUND       = "settings.reaction.notifications.sound";
+  public static final String REACTION_VIBRATE_ENABLED          = "settings.reaction.vibrate.enabled";
+
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
   SettingsValues(@NonNull KeyValueStore store) {
@@ -145,7 +149,10 @@ public final class SettingsValues extends SignalStoreValues {
                          PASSPHRASE_TIMEOUT_ENABLED,
                          PASSPHRASE_TIMEOUT,
                          SCREEN_LOCK_ENABLED,
-                         SCREEN_LOCK_TIMEOUT);
+                         SCREEN_LOCK_TIMEOUT,
+                         REACTION_NOTIFICATIONS_ENABLED,
+                         REACTION_NOTIFICATION_SOUND,
+                         REACTION_VIBRATE_ENABLED);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -396,6 +403,35 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setMessageNotificationsRepeatAlerts(int count) {
     putInteger(MESSAGE_REPEAT_ALERTS, count);
+  }
+  public void setReactionNotificationsEnabled(boolean reactionNotificationsEnabled) {
+    putBoolean(REACTION_NOTIFICATIONS_ENABLED, reactionNotificationsEnabled);
+  }
+
+  public boolean isReactionNotificationsEnabled() {
+    return getBoolean(REACTION_NOTIFICATIONS_ENABLED, true); 
+  }
+
+  public void setReactionNotificationSound(@NonNull Uri sound) {
+    putString(REACTION_NOTIFICATION_SOUND, sound.toString());
+  }
+
+  public @NonNull Uri getReactionNotificationSound() {
+    String result = getString(REACTION_NOTIFICATION_SOUND, Settings.System.DEFAULT_NOTIFICATION_URI.toString());
+
+    if (result.startsWith("file:")) {
+      result = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
+    }
+
+    return Uri.parse(result);
+  }
+
+  public boolean isReactionVibrateEnabled() {
+    return getBoolean(REACTION_VIBRATE_ENABLED, true); 
+  }
+
+  public void setReactionVibrateEnabled(boolean reactionVibrateEnabled) {
+    putBoolean(REACTION_VIBRATE_ENABLED, reactionVibrateEnabled);
   }
 
   public @NonNull NotificationPrivacyPreference getMessageNotificationsPrivacy() {

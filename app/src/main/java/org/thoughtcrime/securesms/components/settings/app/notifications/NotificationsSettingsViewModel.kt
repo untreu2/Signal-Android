@@ -98,15 +98,20 @@ class NotificationsSettingsViewModel(private val sharedPreferences: SharedPrefer
     refresh()
   }
 
+  fun setReactionNotificationsEnabled(enabled: Boolean) {
+    SignalStore.settings.isReactionNotificationsEnabled = enabled
+    NotificationChannels.getInstance().updateReactionChannelEnabled(enabled)
+    refresh()
+  }
+
   fun setNotifyWhenContactJoinsSignal(enabled: Boolean) {
     SignalStore.settings.isNotifyWhenContactJoinsSignal = enabled
     refresh()
   }
 
   /**
-   * @param currentState If provided and [calculateSlowNotifications] = false, then we will copy the slow notification state from it
-   * @param calculateSlowNotifications If true, calculate the true slow notification state (this is not main-thread safe). Otherwise, it will copy from
-   * [currentState] or default to false.
+   * @param currentState
+   * @param calculateSlowNotifications
    */
   private fun getState(currentState: NotificationsSettingsState? = null, calculateSlowNotifications: Boolean = false): NotificationsSettingsState = NotificationsSettingsState(
     messageNotificationsState = MessageNotificationsState(
@@ -129,12 +134,20 @@ class NotificationsSettingsViewModel(private val sharedPreferences: SharedPrefer
         false
       }
     ),
+    reactionNotificationsState = ReactionNotificationsState(
+      notificationsEnabled = SignalStore.settings.isReactionNotificationsEnabled && canEnableNotifications(),
+      canEnableNotifications = canEnableNotifications(),
+      sound = SignalStore.settings.reactionNotificationSound,
+      vibrateEnabled = SignalStore.settings.isReactionVibrateEnabled
+    ),
     callNotificationsState = CallNotificationsState(
       notificationsEnabled = SignalStore.settings.isCallNotificationsEnabled && canEnableNotifications(),
       canEnableNotifications = canEnableNotifications(),
       ringtone = SignalStore.settings.callRingtone,
       vibrateEnabled = SignalStore.settings.isCallVibrateEnabled
     ),
+
+
     notifyWhenContactJoinsSignal = SignalStore.settings.isNotifyWhenContactJoinsSignal
   )
 

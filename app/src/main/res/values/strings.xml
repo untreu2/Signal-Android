@@ -7,7 +7,36 @@
 <!-- smartling.instruction_comments_enabled = on -->
 <resources>
     <string name="app_name" translatable="false">Signal</string>
+    <string name="NotificationsSettingsFragment__reactions">Reactions</string>
+    <string name="ConversationSettingsFragment__reactions_notifications">Reactions Notifications</string>
+    <string name="ConversationSettingsFragment__customize_reactions_notifications">Customize notification settings for reactions</string>
+    
+    <!-- Reactions Notifications -->
+    <string name="reactions_settings_title">Reactions</string>
+    <string name="reactions_notifications">Reactions notifications</string>
+    <string name="reactions_use_custom_notifications">Use custom notifications for reactions</string>
+    <string name="reactions_customize_notifications">Customize reaction sound and vibration</string>
+    <string name="reactions_notification_sound">Reaction notification sound</string>
+    <string name="reactions_vibrate_option">Reaction vibration</string>
+    <string name="reactions_vibrate_default">Settings default</string>
+    <string name="reactions_vibrate_on">Vibrate on reactions</string>
+    <string name="reactions_vibrate_off">No vibration</string>
+    <string name="reactions_sound_default">Default sound</string>
+    <string name="reactions_sound_none">No sound</string>
+    <string name="use_custom_notifications">Use custom notifications</string>
+    <string name="reactions_customize_notifications_summary">Customize reaction sound and vibration</string>
+    <string name="chat_reactions_notifications">Reactions Notifications</string>
+    <string name="chat_reactions_enable">Enable Reactions Notifications</string>
 
+    <!-- Notifications Summary (Used in the notifications UI) -->
+    <string name="reactions_notification_summary">Receive notifications when someone reacts to your messages.</string>
+    <string name="reactions_notifications_enable_summary">Enable or disable reactions notifications for this conversation.</string>
+
+    <!-- Notification Channel Description -->
+    <string name="notification_channel_reactions_description">Notifications for message reactions.</string>
+
+    <!-- Customization Options -->
+    <string name="reactions_custom_notifications_summary">Set custom sounds and vibration patterns for reactions notifications.</string>
     <string name="install_url" translatable="false">https://signal.org/install</string>
     <string name="donate_url" translatable="false">https://signal.org/donate</string>
     <string name="backup_support_url" translatable="false">https://support.signal.org/hc/articles/360007059752</string>
