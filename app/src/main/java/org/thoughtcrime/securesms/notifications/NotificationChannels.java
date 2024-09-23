@@ -384,7 +384,7 @@ public class NotificationChannels {
     if (reactionChannel != null) {
       // Kanalın önem seviyesini değiştiriyoruz: Yüksek (aktif) ya da yok (pasif)
       reactionChannel.setImportance(enabled ? NotificationManager.IMPORTANCE_HIGH : NotificationManager.IMPORTANCE_NONE);
-      notificationManager.createNotificationChannel(reactionChannel); // Kanalı güncelleyin
+      notificationManager.createNotificationChannel(reactionChannel);
     }
   }
 
