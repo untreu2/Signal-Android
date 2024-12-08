@@ -5,6 +5,7 @@ import android.net.Uri
 data class NotificationsSettingsState(
   val messageNotificationsState: MessageNotificationsState,
   val callNotificationsState: CallNotificationsState,
+  val reactionNotificationsState: ReactionNotificationsState,
   val notifyWhenContactJoinsSignal: Boolean
 )
 
@@ -22,9 +23,18 @@ data class MessageNotificationsState(
   val troubleshootNotifications: Boolean
 )
 
+data class ReactionNotificationsState(
+  val notificationsEnabled: Boolean,
+  val canEnableNotifications: Boolean,
+  val sound: Uri,
+  val vibrateEnabled: Boolean
+)
+
 data class CallNotificationsState(
   val notificationsEnabled: Boolean,
   val canEnableNotifications: Boolean,
   val ringtone: Uri,
   val vibrateEnabled: Boolean
 )
+
+

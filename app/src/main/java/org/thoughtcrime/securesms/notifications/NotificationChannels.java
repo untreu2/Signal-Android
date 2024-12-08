@@ -373,6 +373,20 @@ public class NotificationChannels {
     SignalDatabase.recipients().setNotificationChannel(recipient.getId(), success ? newChannelId : null);
     ensureCustomChannelConsistency();
   }
+  public synchronized void updateReactionChannelEnabled(boolean enabled) {
+    if (!supported()) {
+      return;
+    }
+
+    NotificationManager notificationManager = ServiceUtil.getNotificationManager(context);
+    NotificationChannel reactionChannel = notificationManager.getNotificationChannel(getReactionsChannel());
+
+    if (reactionChannel != null) {
+      reactionChannel.setImportance(enabled ? NotificationManager.IMPORTANCE_HIGH : NotificationManager.IMPORTANCE_NONE);
+      notificationManager.createNotificationChannel(reactionChannel);
+    }
+  }
+
 
   /**
    * @return The vibrate settings for the default message channel.
@@ -833,8 +847,8 @@ public class NotificationChannels {
 
   private static AudioAttributes getRingtoneAudioAttributes() {
     return new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
-        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-        .build();
+                                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                        .build();
   }
 
   @TargetApi(26)
